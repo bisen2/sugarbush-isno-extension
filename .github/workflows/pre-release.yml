@@ -1,0 +1,28 @@
+name: Pre-release
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  Publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts'
+    - name: Install dependencies
+      run: npm install
+    - name: Build package
+      run: npm run package
+    - name: Publish artifacts
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: latest
+        prerelease: true
+        title: Development Build
+        files: sugarbush-isno-extension.zip
